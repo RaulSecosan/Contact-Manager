@@ -1,0 +1,26 @@
+body {
+  background-color: #f8f9fa;
+}
+
+.contact-avatar {
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background-color: #e7f0ff;
+  color: #0d6efd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.card {
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+}
+
+.card:hover {
+  border-color: #b6d4fe;
+}
