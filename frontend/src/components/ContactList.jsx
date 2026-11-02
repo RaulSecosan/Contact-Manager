@@ -1,5 +1,6 @@
 import { useState } from "react";
 import ContactCard from "./ContactCard";
+import ExportButton from "./ExportButton";
 
 function ContactList({ contacts, onAdd, onEdit, onDelete }) {
   const [search, setSearch] = useState("");
@@ -16,9 +17,13 @@ function ContactList({ contacts, onAdd, onEdit, onDelete }) {
           <p className="text-muted mb-0">Manage your address book</p>
         </div>
 
-        <button className="btn btn-primary" onClick={onAdd}>
-          + Add Contact
-        </button>
+        <div className="d-flex flex-wrap gap-2">
+          <ExportButton contacts={contacts} />
+
+          <button className="btn btn-primary" onClick={onAdd}>
+            + Add Contact
+          </button>
+        </div>
       </div>
 
       <input
