@@ -1,13 +1,12 @@
+import { useState } from "react";
+import ContactCard from "./ContactCard";
 
-import { useState } from 'react'
-import ContactCard from './ContactCard'
+function ContactList({ contacts, onAdd, onEdit, onDelete }) {
+  const [search, setSearch] = useState("");
 
-function ContactList({ contacts, onAdd }) {
-  const [search, setSearch] = useState('')
-
-  const filteredContacts = contacts.filter(contact =>
-    contact.name.toLowerCase().includes(search.toLowerCase())
-  )
+  const filteredContacts = contacts.filter((contact) =>
+    contact.name.toLowerCase().includes(search.toLowerCase()),
+  );
 
   return (
     <main className="container py-5">
@@ -27,22 +26,25 @@ function ContactList({ contacts, onAdd }) {
         className="form-control mb-4"
         placeholder="Search contacts by name..."
         value={search}
-        onChange={event => setSearch(event.target.value)}
+        onChange={(event) => setSearch(event.target.value)}
       />
 
       <div className="row g-3">
-        {filteredContacts.map(contact => (
-          <ContactCard key={contact.id} contact={contact} />
+        {filteredContacts.map((contact) => (
+          <ContactCard
+            key={contact.id}
+            contact={contact}
+            onEdit={onEdit}
+            onDelete={onDelete}
+          />
         ))}
       </div>
 
       {filteredContacts.length === 0 && (
-        <p className="text-center text-muted mt-5">
-          No contacts found.
-        </p>
+        <p className="text-center text-muted mt-5">No contacts found.</p>
       )}
     </main>
-  )
+  );
 }
 
-export default ContactList
+export default ContactList;
