@@ -1,0 +1,63 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="q7kqzIRYkNgXiivpDSS8">
+    <mxGraphModel dx="1079" dy="581" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="4PXaK_9AsKaDskxLZqc--4" edge="1" parent="1" source="4PXaK_9AsKaDskxLZqc--1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;defaultLabelBackgroundColor=page;startArrow=classic;startFill=1;" target="4PXaK_9AsKaDskxLZqc--2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4PXaK_9AsKaDskxLZqc--1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;" value="React Frontend&lt;div&gt;&lt;font style=&quot;font-size: 10px;&quot;&gt;User Interface&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="70" width="185" x="333" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="4PXaK_9AsKaDskxLZqc--9" edge="1" parent="1" source="4PXaK_9AsKaDskxLZqc--2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;defaultLabelBackgroundColor=page;startArrow=openThin;startFill=0;" target="4PXaK_9AsKaDskxLZqc--6">
+          <mxGeometry relative="1" x="0.0061" as="geometry" />
+        </mxCell>
+        <mxCell id="4PXaK_9AsKaDskxLZqc--16" connectable="0" parent="4PXaK_9AsKaDskxLZqc--9" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;" value="SQL / Read &amp;amp; Write" vertex="1">
+          <mxGeometry relative="1" x="-0.0754" y="2" as="geometry">
+            <mxPoint x="12" y="-17" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="4PXaK_9AsKaDskxLZqc--10" edge="1" parent="1" source="4PXaK_9AsKaDskxLZqc--2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;defaultLabelBackgroundColor=page;" target="4PXaK_9AsKaDskxLZqc--7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4PXaK_9AsKaDskxLZqc--17" connectable="0" parent="4PXaK_9AsKaDskxLZqc--10" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;" value="Publish Signup Event" vertex="1">
+          <mxGeometry relative="1" x="-0.2919" y="-1" as="geometry">
+            <mxPoint x="-64" y="2" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="4PXaK_9AsKaDskxLZqc--11" edge="1" parent="1" source="4PXaK_9AsKaDskxLZqc--2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;defaultLabelBackgroundColor=page;startArrow=classic;startFill=1;" target="4PXaK_9AsKaDskxLZqc--8">
+          <mxGeometry relative="1" x="0.0061" as="geometry" />
+        </mxCell>
+        <mxCell id="4PXaK_9AsKaDskxLZqc--19" connectable="0" parent="4PXaK_9AsKaDskxLZqc--11" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;" value="HTTP / REST" vertex="1">
+          <mxGeometry relative="1" x="0.0043" y="1" as="geometry">
+            <mxPoint x="-1" y="-19" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="4PXaK_9AsKaDskxLZqc--2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;" value="Spring Boot Backend&lt;div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 10px;&quot;&gt;REST API, Authentication, CRUD&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="70" width="185" x="333" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="4PXaK_9AsKaDskxLZqc--5" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="&lt;font style=&quot;font-size: 10px;&quot;&gt;HTTP REST/JSON&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="60" x="430" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="4PXaK_9AsKaDskxLZqc--6" parent="1" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;" value="PostgreSQL&lt;br&gt;&lt;div&gt;&lt;font style=&quot;font-size: 10px;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(#000000, var(--ge-light-color, #ffffff));&quot;&gt;Users, &lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(#000000, var(--ge-light-color, #ffffff));&quot;&gt;Contacts&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;/div&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="130" x="190" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="4PXaK_9AsKaDskxLZqc--12" edge="1" parent="1" source="4PXaK_9AsKaDskxLZqc--7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;defaultLabelBackgroundColor=page;" target="4PXaK_9AsKaDskxLZqc--8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4PXaK_9AsKaDskxLZqc--18" connectable="0" parent="4PXaK_9AsKaDskxLZqc--12" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;" value="Consume&amp;nbsp;&lt;div&gt;Signup Event&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.2478" y="-2" as="geometry">
+            <mxPoint x="5" y="-58" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="4PXaK_9AsKaDskxLZqc--7" parent="1" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;" value="Kafka&lt;br&gt;&lt;div&gt;&lt;span style=&quot;font-size: 10px;&quot;&gt;Signup&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="130" x="360.5" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="4PXaK_9AsKaDskxLZqc--8" parent="1" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;" value="Microservice&lt;br&gt;&lt;div&gt;&lt;font style=&quot;font-size: 10px;&quot;&gt;Kafka Consumer + REST API&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="130" x="531" y="320" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
