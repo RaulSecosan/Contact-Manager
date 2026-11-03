@@ -6,37 +6,58 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import "./App.css";
 
-
-
 function App() {
+  const [contacts, setContacts] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [editingContact, setEditingContact] = useState(null);
   const [authPage, setAuthPage] = useState(null);
-
-  const [contacts, setContacts] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    async function loadContacts() {
-      try {
-        const response = await fetch("/api/contacts");
+  // Load contacts from the database
+  async function loadContacts() {
+    try {
+      const response = await fetch("/api/contacts");
 
-        if (!response.ok) {
-          throw new Error("Failed to load contacts");
-        }
-
-        const data = await response.json();
-        setContacts(data);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
+      if (!response.ok) {
+        throw new Error("Could not load contacts");
       }
-    }
 
-    loadContacts();
-  }, []);
+      const data = await response.json();
+      setContacts(data);
+      setError("");
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
+ 
+useEffect(() => {
+  let cancelled = false
+
+  fetch('/api/contacts')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Could not load contacts')
+      }
+      return response.json()
+    })
+    .then(data => {
+      if (!cancelled) {
+        setContacts(data)
+        setError('')
+      }
+    })
+    .catch(error => {
+      if (!cancelled) {
+        setError(error.message)
+      }
+    })
+
+  return () => {
+    cancelled = true
+  }
+}, [])
+
 
   function openAddForm() {
     setEditingContact(null);
@@ -53,52 +74,84 @@ function App() {
     setEditingContact(null);
   }
 
-  function saveContact(contact) {
-    if (editingContact) {
-      setContacts((previousContacts) =>
-        previousContacts.map((item) =>
-          item.id === contact.id ? contact : item,
-        ),
-      );
-    } else {
-      setContacts((previousContacts) => [...previousContacts, contact]);
+  // Add or update contact
+  async function saveContact(contact) {
+    if (contact.picture?.startsWith("data:")) {
+      alert("Picture upload is not available yet.");
+      return;
     }
 
-    closeForm();
+    const isEditing = editingContact !== null;
+
+    const url = isEditing
+      ? `/api/contacts/${editingContact.id}`
+      : "/api/contacts";
+
+    const method = isEditing ? "PUT" : "POST";
+
+    try {
+      const response = await fetch(url, {
+        method: method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: contact.name,
+          address: contact.address,
+          picture: contact.picture,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Could not save contact");
+      }
+
+      await loadContacts();
+      closeForm();
+    } catch (err) {
+      alert(err.message);
+    }
   }
 
-  function deleteContact(id) {
+  // Delete contact
+  async function deleteContact(id) {
     const confirmed = window.confirm(
       "Are you sure you want to delete this contact?",
     );
 
     if (!confirmed) return;
 
-    setContacts((previousContacts) =>
-      previousContacts.filter((contact) => contact.id !== id),
-    );
+    try {
+      const response = await fetch(`/api/contacts/${id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("Could not delete contact");
+      }
+
+      await loadContacts();
+    } catch (err) {
+      alert(err.message);
+    }
   }
 
   return (
     <>
       <Navbar onLogin={() => setAuthPage("login")} />
 
-      {loading && <p className="text-center mt-4">Loading contacts...</p>}
-
       {error && (
-        <div className="container mt-4">
+        <div className="container mt-3">
           <div className="alert alert-danger">{error}</div>
         </div>
       )}
 
-      {!loading && !error && (
-        <ContactList
-          contacts={contacts}
-          onAdd={openAddForm}
-          onEdit={openEditForm}
-          onDelete={deleteContact}
-        />
-      )}
+      <ContactList
+        contacts={contacts}
+        onAdd={openAddForm}
+        onEdit={openEditForm}
+        onDelete={deleteContact}
+      />
 
       {showForm && (
         <ContactForm
