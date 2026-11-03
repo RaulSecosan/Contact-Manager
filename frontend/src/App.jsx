@@ -1,19 +1,42 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "./components/Navbar";
 import ContactList from "./components/ContactList";
 import ContactForm from "./components/ContactForm";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 import "./App.css";
 
-const initialContacts = [
-  { id: 1, name: "Alex Popescu", address: "Timisoara, Romania", picture: "" },
-  { id: 2, name: "Maria Ionescu", address: "Bucuresti, Romania", picture: "" },
-  { id: 3, name: "Andrei Marin", address: "Cluj-Napoca, Romania", picture: "" },
-];
+
 
 function App() {
-  const [contacts, setContacts] = useState(initialContacts);
   const [showForm, setShowForm] = useState(false);
   const [editingContact, setEditingContact] = useState(null);
+  const [authPage, setAuthPage] = useState(null);
+
+  const [contacts, setContacts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    async function loadContacts() {
+      try {
+        const response = await fetch("/api/contacts");
+
+        if (!response.ok) {
+          throw new Error("Failed to load contacts");
+        }
+
+        const data = await response.json();
+        setContacts(data);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadContacts();
+  }, []);
 
   function openAddForm() {
     setEditingContact(null);
@@ -58,20 +81,44 @@ function App() {
 
   return (
     <>
-      <Navbar />
+      <Navbar onLogin={() => setAuthPage("login")} />
 
-      <ContactList
-        contacts={contacts}
-        onAdd={openAddForm}
-        onEdit={openEditForm}
-        onDelete={deleteContact}
-      />
+      {loading && <p className="text-center mt-4">Loading contacts...</p>}
+
+      {error && (
+        <div className="container mt-4">
+          <div className="alert alert-danger">{error}</div>
+        </div>
+      )}
+
+      {!loading && !error && (
+        <ContactList
+          contacts={contacts}
+          onAdd={openAddForm}
+          onEdit={openEditForm}
+          onDelete={deleteContact}
+        />
+      )}
 
       {showForm && (
         <ContactForm
           contact={editingContact}
           onSave={saveContact}
           onClose={closeForm}
+        />
+      )}
+
+      {authPage === "login" && (
+        <Login
+          onClose={() => setAuthPage(null)}
+          onRegister={() => setAuthPage("register")}
+        />
+      )}
+
+      {authPage === "register" && (
+        <Register
+          onClose={() => setAuthPage(null)}
+          onLogin={() => setAuthPage("login")}
         />
       )}
     </>
