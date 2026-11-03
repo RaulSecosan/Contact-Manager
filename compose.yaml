@@ -1,0 +1,18 @@
+services:
+  database:
+    image: postgres:18
+    container_name: contactmanager-db
+
+    environment:
+      POSTGRES_DB: contactmanager
+      POSTGRES_USER: contactuser
+      POSTGRES_PASSWORD: contactpass
+
+    ports:
+      - "127.0.0.1:5432:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql
+
+volumes:
+  postgres_data:
