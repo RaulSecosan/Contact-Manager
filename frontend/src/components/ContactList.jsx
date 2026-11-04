@@ -2,7 +2,7 @@ import { useState } from "react";
 import ContactCard from "./ContactCard";
 import ExportButton from "./ExportButton";
 
-function ContactList({ contacts, onAdd, onEdit, onDelete }) {
+function ContactList({ contacts, isAuthenticated, onAdd, onEdit, onDelete }) {
   const [search, setSearch] = useState("");
 
   const filteredContacts = contacts.filter((contact) =>
@@ -20,9 +20,11 @@ function ContactList({ contacts, onAdd, onEdit, onDelete }) {
         <div className="d-flex flex-wrap gap-2">
           <ExportButton contacts={contacts} />
 
-          <button className="btn btn-primary" onClick={onAdd}>
-            + Add Contact
-          </button>
+          {isAuthenticated && (
+            <button className="btn btn-primary" onClick={onAdd}>
+              Add Contact
+            </button>
+          )}
         </div>
       </div>
 
@@ -39,6 +41,7 @@ function ContactList({ contacts, onAdd, onEdit, onDelete }) {
           <ContactCard
             key={contact.id}
             contact={contact}
+            isAuthenticated={isAuthenticated}
             onEdit={onEdit}
             onDelete={onDelete}
           />

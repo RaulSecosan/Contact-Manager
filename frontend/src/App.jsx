@@ -4,10 +4,12 @@ import ContactList from "./components/ContactList";
 import ContactForm from "./components/ContactForm";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import { apiRequest, refreshCsrf } from "./api";
 import "./App.css";
 
 function App() {
   const [contacts, setContacts] = useState([]);
+  const [user, setUser] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [editingContact, setEditingContact] = useState(null);
   const [authPage, setAuthPage] = useState(null);
@@ -30,41 +32,101 @@ function App() {
     }
   }
 
- 
-useEffect(() => {
-  let cancelled = false
+  // Load contacts and check the current session
+  useEffect(() => {
+    let cancelled = false;
 
-  fetch('/api/contacts')
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Could not load contacts')
-      }
-      return response.json()
-    })
-    .then(data => {
-      if (!cancelled) {
-        setContacts(data)
-        setError('')
-      }
-    })
-    .catch(error => {
-      if (!cancelled) {
-        setError(error.message)
-      }
-    })
+    fetch("/api/contacts")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Could not load contacts");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (!cancelled) {
+          setContacts(data);
+        }
+      })
+      .catch((err) => {
+        if (!cancelled) {
+          setError(err.message);
+        }
+      });
 
-  return () => {
-    cancelled = true
+    fetch("/api/auth/me", { credentials: "include" })
+      .then((response) => {
+        if (response.redirected || !response.ok) {
+          return null;
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (!cancelled) {
+          setUser(data);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setUser(null);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // Called after successful login
+  async function handleLoginSuccess() {
+    const response = await fetch("/api/auth/me", {
+      credentials: "include",
+    });
+
+    if (response.redirected || !response.ok) {
+      throw new Error("Could not verify login");
+    }
+
+    const data = await response.json();
+
+    setUser(data);
+    setAuthPage(null);
+    await refreshCsrf();
   }
-}, [])
 
+  // Logout
+  async function handleLogout() {
+    try {
+      await refreshCsrf();
+
+      const response = await apiRequest("/logout", {
+        method: "POST",
+      });
+
+      if (!response.ok) {
+        throw new Error("Logout failed");
+      }
+
+      setUser(null);
+      setAuthPage(null);
+      closeForm();
+
+      await refreshCsrf();
+    } catch (err) {
+      alert(err.message);
+    }
+  }
 
   function openAddForm() {
+    if (!user) return;
+
     setEditingContact(null);
     setShowForm(true);
   }
 
   function openEditForm(contact) {
+    if (!user) return;
+
     setEditingContact(contact);
     setShowForm(true);
   }
@@ -76,6 +138,8 @@ useEffect(() => {
 
   // Add or update contact
   async function saveContact(contact) {
+    if (!user) return;
+
     if (contact.picture?.startsWith("data:")) {
       alert("Picture upload is not available yet.");
       return;
@@ -90,8 +154,8 @@ useEffect(() => {
     const method = isEditing ? "PUT" : "POST";
 
     try {
-      const response = await fetch(url, {
-        method: method,
+      const response = await apiRequest(url, {
+        method,
         headers: {
           "Content-Type": "application/json",
         },
@@ -115,6 +179,8 @@ useEffect(() => {
 
   // Delete contact
   async function deleteContact(id) {
+    if (!user) return;
+
     const confirmed = window.confirm(
       "Are you sure you want to delete this contact?",
     );
@@ -122,7 +188,7 @@ useEffect(() => {
     if (!confirmed) return;
 
     try {
-      const response = await fetch(`/api/contacts/${id}`, {
+      const response = await apiRequest(`/api/contacts/${id}`, {
         method: "DELETE",
       });
 
@@ -138,7 +204,11 @@ useEffect(() => {
 
   return (
     <>
-      <Navbar onLogin={() => setAuthPage("login")} />
+      <Navbar
+        user={user}
+        onLogin={() => setAuthPage("login")}
+        onLogout={handleLogout}
+      />
 
       {error && (
         <div className="container mt-3">
@@ -148,12 +218,13 @@ useEffect(() => {
 
       <ContactList
         contacts={contacts}
+        isAuthenticated={!!user}
         onAdd={openAddForm}
         onEdit={openEditForm}
         onDelete={deleteContact}
       />
 
-      {showForm && (
+      {showForm && user && (
         <ContactForm
           contact={editingContact}
           onSave={saveContact}
@@ -165,6 +236,7 @@ useEffect(() => {
         <Login
           onClose={() => setAuthPage(null)}
           onRegister={() => setAuthPage("register")}
+          onSuccess={handleLoginSuccess}
         />
       )}
 
@@ -172,6 +244,7 @@ useEffect(() => {
         <Register
           onClose={() => setAuthPage(null)}
           onLogin={() => setAuthPage("login")}
+          onSuccess={() => setAuthPage("login")}
         />
       )}
     </>
