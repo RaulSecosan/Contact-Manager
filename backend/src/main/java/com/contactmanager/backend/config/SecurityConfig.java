@@ -35,7 +35,10 @@ public class SecurityConfig {
                     "/api/auth/register"
                 ).permitAll()
 
-                .anyRequest().authenticated()
+                .requestMatchers(
+                    HttpMethod.GET, 
+                    "/uploads/**"
+                ).permitAll().anyRequest().authenticated()
             )
 
             .exceptionHandling(exceptions -> exceptions

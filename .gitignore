@@ -21,3 +21,4 @@ target/
 
 # Logs
 *.log
+backend/uploads/

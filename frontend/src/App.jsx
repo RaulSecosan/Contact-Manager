@@ -137,13 +137,9 @@ function App() {
   }
 
   // Add or update contact
+
   async function saveContact(contact) {
     if (!user) return;
-
-    if (contact.picture?.startsWith("data:")) {
-      alert("Picture upload is not available yet.");
-      return;
-    }
 
     const isEditing = editingContact !== null;
 
@@ -154,6 +150,33 @@ function App() {
     const method = isEditing ? "PUT" : "POST";
 
     try {
+      let pictureUrl = contact.picture || "";
+
+      // Upload a new picture if one was selected
+      if (pictureUrl.startsWith("data:")) {
+        const imageResponse = await fetch(pictureUrl);
+        const imageBlob = await imageResponse.blob();
+
+        const formData = new FormData();
+        const filename =
+          imageBlob.type === "image/png" ? "contact.png" : "contact.jpg";
+
+        formData.append("file", imageBlob, filename);
+
+        const uploadResponse = await apiRequest("/api/uploads", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!uploadResponse.ok) {
+          throw new Error("Could not upload picture");
+        }
+
+        const uploadData = await uploadResponse.json();
+        pictureUrl = uploadData.url;
+      }
+
+      // Save contact information
       const response = await apiRequest(url, {
         method,
         headers: {
@@ -162,7 +185,7 @@ function App() {
         body: JSON.stringify({
           name: contact.name,
           address: contact.address,
-          picture: contact.picture,
+          picture: pictureUrl,
         }),
       });
 
