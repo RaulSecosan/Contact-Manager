@@ -4,6 +4,7 @@ package com.contactmanager.backend.controller;
 import com.contactmanager.backend.dto.RegisterRequest;
 import com.contactmanager.backend.model.User;
 import com.contactmanager.backend.repository.UserRepository;
+import com.contactmanager.backend.service.UserEventPublisher;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,13 +21,17 @@ public class AuthController {
 
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
+    private final UserEventPublisher eventPublisher;
 
     public AuthController(
         UserRepository repository,
-        PasswordEncoder passwordEncoder
+        PasswordEncoder passwordEncoder,
+        UserEventPublisher eventPublisher
+
     ) {
         this.repository = repository;
         this.passwordEncoder = passwordEncoder;
+        this.eventPublisher = eventPublisher;
     }
 
     @PostMapping("/register")
@@ -61,6 +66,7 @@ public class AuthController {
 
         User user = new User(username, email, passwordHash);
         repository.save(user);
+        eventPublisher.userRegistered(user);
 
         return Map.of("message", "Account created successfully");
     }
