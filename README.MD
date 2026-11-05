@@ -42,18 +42,29 @@ contactManager/
 
 To run the application using Docker:
 
+- Git (for cloning the repo)
 - Docker Desktop or Docker Engine
 - Docker Compose
 
-Java and Node.js do not need to be installed locally when using Docker.
+### Installation and running
 
-## Installation and running
+- [Download Git](https://git-scm.com/install/)
+- [Docker Desktop for Windows](https://docs.docker.com/desktop/setup/install/windows-install/)
+- [Docker Desktop for macOS](https://docs.docker.com/desktop/setup/install/mac-install/)
+- [Docker Engine for Linux](https://docs.docker.com/engine/install/)
+- [Docker Compose plugin for Linux](https://docs.docker.com/compose/install/linux/)
+
+On Linux, make sure the Docker Compose plugin is installed.
+
+On Windows, Docker Desktop can use WSL 2. If needed, follow the [official Microsoft WSL installation guide](https://learn.microsoft.com/en-us/windows/wsl/install).
+
+Java and Node.js do not need to be installed locally when using Docker.
 
 ### 1. Clone the repository
 
 ```bash
 git clone https://github.com/RaulSecosan/Contact-Manager.git
-cd contactManager
+cd Contact-Manager
 ```
 
 ### 2. Configure environment variables
@@ -104,7 +115,7 @@ To add, edit or delete contacts, create an account using Register and then log i
 docker compose down
 ```
 
-This stops the containers without removing persistent volumes.
+This stops the containers without removing persistent volumes (volumes containing database records, uploaded pictures and Kafka data).
 
 To start the application again:
 
@@ -142,7 +153,7 @@ The application uses Spring Security with HTTP sessions.
 
 ## Contact pictures
 
-JPG and PNG pictures can be uploaded when creating or editing contacts.
+JPG and PNG pictures can be uploaded when creating or editing contacts, with a maximum file size of 5 MB..
 
 Images are stored in a persistent Docker volume. PostgreSQL stores their relative URLs.
 
