@@ -14,6 +14,21 @@ function App() {
   const [editingContact, setEditingContact] = useState(null);
   const [authPage, setAuthPage] = useState(null);
   const [error, setError] = useState("");
+  const [notification, setNotification] = useState(null);
+
+  useEffect(() => {
+    if (!notification) return;
+
+    const timer = setTimeout(() => {
+      setNotification(null);
+    }, 4000);
+
+    return () => clearTimeout(timer);
+  }, [notification]);
+
+  function notify(message, type = "success") {
+    setNotification({ message, type });
+  }
 
   // Load contacts from the database
   async function loadContacts() {
@@ -195,8 +210,13 @@ function App() {
 
       await loadContacts();
       closeForm();
+      notify(
+        isEditing
+          ? "Contact updated successfully!"
+          : "Contact added successfully!",
+      );
     } catch (err) {
-      alert(err.message);
+      notify(err.message, "danger");
     }
   }
 
@@ -220,8 +240,9 @@ function App() {
       }
 
       await loadContacts();
+      notify("Contact deleted successfully!");
     } catch (err) {
-      alert(err.message);
+      notify(err.message, "danger");
     }
   }
 
@@ -232,6 +253,28 @@ function App() {
         onLogin={() => setAuthPage("login")}
         onLogout={handleLogout}
       />
+
+      {notification && (
+        <div className="container mt-3">
+          <div
+            className={`alert alert-${notification.type} d-flex align-items-center gap-2`}
+            role={notification.type === "danger" ? "alert" : "status"}
+          >
+            <span aria-hidden="true">
+              {notification.type === "success" ? "✓" : "✕"}
+            </span>
+
+            <span className="flex-grow-1">{notification.message}</span>
+
+            <button
+              type="button"
+              className="btn-close"
+              aria-label="Close notification"
+              onClick={() => setNotification(null)}
+            />
+          </div>
+        </div>
+      )}
 
       {error && (
         <div className="container mt-3">

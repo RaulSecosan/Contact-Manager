@@ -4,21 +4,24 @@ function ContactForm({ contact, onSave, onClose }) {
   const [name, setName] = useState(contact?.name || "");
   const [address, setAddress] = useState(contact?.address || "");
   const [picture, setPicture] = useState(contact?.picture || "");
+  const [fileError, setFileError] = useState("");
 
   const isEditing = Boolean(contact);
 
   function handlePicture(event) {
     const file = event.target.files[0];
+
+    setFileError("");
     if (!file) return;
 
-    if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
-      alert("Please select a JPG, PNG or WebP image.");
+    if (!["image/jpeg", "image/png"].includes(file.type)) {
+      setFileError("Please select a JPG or PNG image.");
       event.target.value = "";
       return;
     }
 
     if (file.size > 5 * 1024 * 1024) {
-      alert("The image must be smaller than 5 MB.");
+      setFileError("The image must be smaller than 5 MB.");
       event.target.value = "";
       return;
     }
@@ -98,10 +101,14 @@ function ContactForm({ contact, onSave, onClose }) {
               id="contact-picture"
               type="file"
               className="form-control"
-              accept="image/png,image/jpeg,image/webp"
+              accept="image/png,image/jpeg"
               onChange={handlePicture}
             />
-
+            {fileError && (
+              <div className="alert alert-danger mt-2" role="alert">
+                ✕ {fileError}
+              </div>
+            )}
             {picture && (
               <div className="d-flex align-items-center gap-3 mt-3">
                 <img src={picture} alt="Preview" className="contact-avatar" />
